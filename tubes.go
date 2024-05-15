@@ -2,27 +2,28 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"os/exec"
+	"runtime"
 	"time"
 )
 
 const NMAX = 5000
 
-type tabPenduduk [NMAX]dataDesa
+type tabDesa [NMAX]dataDesa
+type tabPenduduk [NMAX]dataPenduduk
 
 type dataDesa struct {
 	namaDesa   string
 	alamatDesa string
 	jumlahRT   int
 	jumlahRW   int
-	penduduk   dataPenduduk
 }
 
 type dataPenduduk struct {
 	namaPenduduk     string
 	umurPenduduk     int
 	alamatRumah      string
-	jumlahRT         int
-	jumlahRW         int
 	noRT             int
 	noRW             int
 	noNIK            int
@@ -36,54 +37,54 @@ type Login struct {
 }
 
 // KAMUS GLOBAL
-var data tabPenduduk
-var nData int
+var data tabDesa
+var penduduk tabPenduduk
+var nData, pData int
 var shouldExit bool
 var namaDicari string
 var pilih, nomorNIK int
 
 func main() {
-	var input Login
-	login(&input)
+	//var input Login
+	//login(&input)
 	loading()
-	menu()
+	for !shouldExit {
+		menu()
+		switch  {
+		case pilih == 1:
+			inputDesa(&data, &nData)
+		case pilih == 2:
+			inputPenduduk(&penduduk, data, &pData)
+		case pilih == 3:
+			cariData(penduduk, pData)
+		}
+		if pilih == 4{
+			shouldExit = true
+			fmt.Println("================================")
+			fmt.Printf("%14s\n", "Terima Kasih!")
+			fmt.Println("================================")
+		} 
+	}
 }
 
 // Tampilan Menu Utama
 func menu() {
-	for !shouldExit {
 		fmt.Println("================================")
 		fmt.Printf("%18s\n", "SI DESA")
 		fmt.Println(" Aplikasi Sistem Informasi Desa")
 		fmt.Println("================================")
 		fmt.Println("Pilih menu:")
-		fmt.Println("1. Input Data")
-		fmt.Println("2. Cari Data")
-		fmt.Println("3. Hapus Data")
+		fmt.Println("1. Input Data Desa")
+		fmt.Println("2. Input Data Penduduk")
+		fmt.Println("3. Cari Data")
 		fmt.Println("4. Edit Data")
 		fmt.Println("5. Exit")
 		fmt.Println()
+		fmt.Println("================================")
 		fmt.Print("Pilih:")
 		fmt.Scan(&pilih)
-		fmt.Println("================================")
 		fmt.Println()
-
-		switch pilih {
-		case 1:
-			inputData(&data, &nData)
-		case 2:
-			cariData(data, nData)
-		// case 3:
-		// 	Implement Hapus Data
-		// case 4:
-		// 	Implement Edit Data
-		case 5:
-			shouldExit = true
-			fmt.Println("================================")
-			fmt.Println("TERIMA KASIH")
-			fmt.Println("================================")
-		}
-	}
+		clear()
 }
 
 // Loading Animation
@@ -102,50 +103,50 @@ func loading() {
 }
 
 // Login Function
-func login(input *Login) {
-	durasi := 3
-	percobaanMaks := 2
-	percobaan := 0
-	input.username = "Admin"
-	input.email = "Admin"
-	input.password = "Admin"
+//func login(input *Login) {
+// 	durasi := 3
+// 	percobaanMaks := 2
+// 	percobaan := 0
+// 	input.username = "Admin"
+// 	input.email = "Admin"
+// 	input.password = "Admin"
 
-	time.Sleep(time.Duration(durasi) * time.Second)
-	fmt.Println("================================")
-	fmt.Println("SELAMAT DATANG DI SIDESA!!")
-	fmt.Println("================================")
+// 	time.Sleep(time.Duration(durasi) * time.Second)
+// 	fmt.Println("================================")
+// 	fmt.Println("SELAMAT DATANG DI SIDESA!!")
+// 	fmt.Println("================================")
 
-	for percobaan <= percobaanMaks {
-		fmt.Print("Username: ")
-		fmt.Scan(&input.username)
-		fmt.Print("Email: ")
-		fmt.Scan(&input.email)
-		fmt.Print("Password: ")
-		fmt.Scan(&input.password)
-		if input.username == "Admin" && input.email == "Admin" && input.password == "Admin" {
-			break
-		} else {
-			fmt.Println("Data tidak sesuai")
-			percobaan++
-		}
-		if percobaan == percobaanMaks {
-			fmt.Println("================================")
-			fmt.Println("MOHON MAAF DATA KAMU SALAH")
-			fmt.Println("================================")
-			fmt.Println("SILAHKAN TUNGGU DALAM WAKTU 1 MENIT")
-			fmt.Println("================================")
-			time.Sleep(time.Duration(durasi) * time.Second)
-			login(input)
-			return
-		}
-	}
-}
+// 	for percobaan <= percobaanMaks {
+// 		fmt.Print("Username: ")
+// 		fmt.Scan(&input.username)
+// 		fmt.Print("Email: ")
+// 		fmt.Scan(&input.email)
+// 		fmt.Print("Password: ")
+// 		fmt.Scan(&input.password)
+// 		if input.username == "Admin" && input.email == "Admin" && input.password == "Admin" {
+// 			break
+// 		} else {
+// 			fmt.Println("Data tidak sesuai")
+// 			percobaan++
+// 		}
+// 		if percobaan == percobaanMaks {
+// 			fmt.Println("================================")
+// 			fmt.Println("MOHON MAAF DATA KAMU SALAH")
+// 			fmt.Println("================================")
+// 			fmt.Println("SILAHKAN TUNGGU DALAM WAKTU 1 MENIT")
+// 			fmt.Println("================================")
+// 			time.Sleep(time.Duration(durasi) * time.Second)
+// 			login(input)
+// 			return
+// 		}
+// 	}
+// //}
 
 // Function to Input Data
-func inputData(T *tabPenduduk, n *int) {
+func inputDesa(T *tabDesa, n *int) {
+	fmt.Println("Menu >> Input data")
 	fmt.Println("================================")
-	fmt.Println("================================")
-	fmt.Println("SILAHKAN MASUKKAN DATA PENDUDUK")
+	fmt.Println("SILAHKAN MASUKKAN DATA DESA")
 	fmt.Println("================================")
 	fmt.Println("Masukkan jumlah data:")
 	fmt.Scan(n)
@@ -160,21 +161,33 @@ func inputData(T *tabPenduduk, n *int) {
 		fmt.Scan(&T[i].jumlahRT)
 		fmt.Print("Jumlah RW: ")
 		fmt.Scan(&T[i].jumlahRW)
-		fmt.Print("Nama Penduduk: ")
-		fmt.Scan(&T[i].penduduk.namaPenduduk)
-		fmt.Print("Alamat Penduduk: ")
-		fmt.Scan(&T[i].penduduk.alamatRumah)
-		fmt.Print("Umur: ")
-		fmt.Scan(&T[i].penduduk.umurPenduduk)
-		fmt.Print("RT: ")
-		fmt.Scan(&T[i].penduduk.noRT)
-		fmt.Print("RW: ")
-		fmt.Scan(&T[i].penduduk.noRW)
-		fmt.Print("Masukkan Nomor NIK: ")
-		fmt.Scan(&T[i].penduduk.noNIK)
-		fmt.Print("Status Kawin?: ")
-		fmt.Scan(&T[i].penduduk.statusPerkawinan)
 		i++
+	}
+}
+
+func inputPenduduk(P *tabPenduduk,t tabDesa, n *int){
+	var namaDesa string
+	fmt.Println("Menu >> Input Data Penduduk")
+	fmt.Println("================================")
+	fmt.Printf("%10s", "data penduduk")
+	fmt.Println("================================")
+	fmt.Print("Masukkan nama desa:")
+	fmt.Scan(&namaDesa)
+	for i := 0; i < *n; i++{
+		if namaDesa == t[i].namaDesa{
+			fmt.Printf("Masukkan penduduk ke-%d\n", i)
+			fmt.Print("Nama: ")
+			fmt.Scan(&P[i].namaPenduduk)
+			fmt.Print("Umur: ")
+			fmt.Scan(&P[i].umurPenduduk)
+			fmt.Print("NIK: ")
+			fmt.Scan(&P[i].noNIK)
+			fmt.Print("Alamat Rumah: ")
+			fmt.Scan(&P[i].alamatRumah)
+			fmt.Print("Status Perkawinan: (Sudah/Belum)")
+			fmt.Scan(&P[i].statusPerkawinan)
+		}
+		
 	}
 }
 
@@ -197,8 +210,8 @@ func cariData(T tabPenduduk, n int) {
 		i := 0
 		found := false
 		for i < n {
-			if T[i].penduduk.namaPenduduk == namaDicari {
-				fmt.Printf("Data Ditemukan: %+v\n", T[i].penduduk)
+			if T[i].namaPenduduk == namaDicari {
+				fmt.Printf("Data Ditemukan: %+v\n", T[i].namaPenduduk)
 				found = true
 			}
 			i++
@@ -213,8 +226,8 @@ func cariData(T tabPenduduk, n int) {
 		i := 0
 		found := false
 		for i < n {
-			if T[i].penduduk.noNIK == nomorNIK {
-				fmt.Printf("Data Ditemukan: %+v\n", T[i].penduduk)
+			if T[i].noNIK == nomorNIK {
+				fmt.Printf("Data Ditemukan: %+v\n", T[i].noNIK)
 				found = true
 			}
 			i++
@@ -228,7 +241,7 @@ func cariData(T tabPenduduk, n int) {
 }
 
 // Function to Print Data
-func cetakData(T tabPenduduk, n int) {
+func cetakData(T tabDesa, p tabPenduduk, n int) {
 	fmt.Println("================================")
 	fmt.Println("DATA PENDUDUK DESA")
 	fmt.Println("================================")
@@ -238,13 +251,25 @@ func cetakData(T tabPenduduk, n int) {
 		fmt.Printf("Alamat Desa: %s\n", T[i].alamatDesa)
 		fmt.Printf("Jumlah RT: %d\n", T[i].jumlahRT)
 		fmt.Printf("Jumlah RW: %d\n", T[i].jumlahRW)
-		fmt.Printf("Nama Penduduk: %s\n", T[i].penduduk.namaPenduduk)
-		fmt.Printf("Alamat Penduduk: %s\n", T[i].penduduk.alamatRumah)
-		fmt.Printf("Umur: %d\n", T[i].penduduk.umurPenduduk)
-		fmt.Printf("RT: %d\n", T[i].penduduk.noRT)
-		fmt.Printf("RW: %d\n", T[i].penduduk.noRW)
-		fmt.Printf("Nomor NIK: %d\n", T[i].penduduk.noNIK)
-		fmt.Printf("Status Kawin: %s\n", T[i].penduduk.statusPerkawinan)
+		fmt.Printf("Nama Penduduk: %s\n", p[i].namaPenduduk)
+		fmt.Printf("Alamat Penduduk: %s\n", p[i].alamatRumah)
+		fmt.Printf("Umur: %d\n", p[i].umurPenduduk)
+		fmt.Printf("RT: %d\n", p[i].noRT)
+		fmt.Printf("RW: %d\n", p[i].noRW)
+		fmt.Printf("Nomor NIK: %d\n", p[i].noNIK)
+		fmt.Printf("Status Kawin: %s\n", p[i].statusPerkawinan)
 		fmt.Println("================================")
 	}
+}
+
+func clear() {
+	var cmd *exec.Cmd
+	switch runtime.GOOS {
+	case "windows":
+		cmd = exec.Command("cmd", "/c", "cls")
+	default:
+		cmd = exec.Command("clear")
+	}
+	cmd.Stdout = os.Stdout
+	cmd.Run()
 }
