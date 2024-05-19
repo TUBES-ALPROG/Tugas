@@ -7,22 +7,20 @@ import (
 
 const NMAX = 5000
 
-type tabPenduduk [NMAX]dataDesa
+type tabPenduduk [NMAX]dataPenduduk
+type tabDesa [NMAX]dataDesa
 
 type dataDesa struct {
 	namaDesa   string
 	alamatDesa string
 	jumlahRT   int
 	jumlahRW   int
-	penduduk   dataPenduduk
 }
 
 type dataPenduduk struct {
 	namaPenduduk     string
 	umurPenduduk     int
 	alamatRumah      string
-	jumlahRT         int
-	jumlahRW         int
 	noRT             int
 	noRW             int
 	noNIK            int
@@ -36,16 +34,18 @@ type Login struct {
 }
 
 // KAMUS GLOBAL
-var data tabPenduduk
-var nData int
+var dataP tabPenduduk
+var dataD tabDesa
+var nDesa int
+var nPenduduk int
 var shouldExit bool
 var namaDicari string
 var pilih, nomorNIK int
 
 func main() {
-	var input Login
-	login(&input)
-	loading()
+	// var input Login
+	// login(&input)
+	// loading()
 	menu()
 }
 
@@ -70,9 +70,9 @@ func menu() {
 
 		switch pilih {
 		case 1:
-			inputData(&data, &nData)
+			inputData(&dataD, &dataP, &nDesa, &nPenduduk)
 		case 2:
-			cariData(data, nData)
+			cariData(dataP, nPenduduk)
 		// case 3:
 		// 	Implement Hapus Data
 		// case 4:
@@ -142,40 +142,49 @@ func login(input *Login) {
 }
 
 // Function to Input Data
-func inputData(T *tabPenduduk, n *int) {
-	fmt.Println("================================")
+func inputData(K *tabDesa, T *tabPenduduk, nDesa, nPenduduk *int) {
 	fmt.Println("================================")
 	fmt.Println("SILAHKAN MASUKKAN DATA PENDUDUK")
 	fmt.Println("================================")
-	fmt.Println("Masukkan jumlah data:")
-	fmt.Scan(n)
-	i := 0
-	for i < *n {
+	fmt.Print("Masukkan jumlah Desa: ")
+	fmt.Scan(nDesa)
+
+	totalPenduduk := 0
+	for i := 0; i < *nDesa; i++ {
 		fmt.Printf("Data Desa Ke-%d\n", i+1)
 		fmt.Print("Nama Desa: ")
-		fmt.Scan(&T[i].namaDesa)
+		fmt.Scan(&(*K)[i].namaDesa)
 		fmt.Print("Alamat Desa: ")
-		fmt.Scan(&T[i].alamatDesa)
+		fmt.Scan(&(*K)[i].alamatDesa)
 		fmt.Print("Jumlah RT: ")
-		fmt.Scan(&T[i].jumlahRT)
+		fmt.Scan(&(*K)[i].jumlahRT)
 		fmt.Print("Jumlah RW: ")
-		fmt.Scan(&T[i].jumlahRW)
-		fmt.Print("Nama Penduduk: ")
-		fmt.Scan(&T[i].penduduk.namaPenduduk)
-		fmt.Print("Alamat Penduduk: ")
-		fmt.Scan(&T[i].penduduk.alamatRumah)
-		fmt.Print("Umur: ")
-		fmt.Scan(&T[i].penduduk.umurPenduduk)
-		fmt.Print("RT: ")
-		fmt.Scan(&T[i].penduduk.noRT)
-		fmt.Print("RW: ")
-		fmt.Scan(&T[i].penduduk.noRW)
-		fmt.Print("Masukkan Nomor NIK: ")
-		fmt.Scan(&T[i].penduduk.noNIK)
-		fmt.Print("Status Kawin?: ")
-		fmt.Scan(&T[i].penduduk.statusPerkawinan)
-		i++
+		fmt.Scan(&(*K)[i].jumlahRW)
+
+		var nPendudukDesa int
+		fmt.Print("Masukkan jumlah penduduk: ")
+		fmt.Scan(&nPendudukDesa)
+
+		for j := 0; j < nPendudukDesa; j++ {
+			fmt.Printf("Data Penduduk Ke-%d Desa %s\n", j+1, (*K)[i].namaDesa)
+			fmt.Print("Nama Penduduk: ")
+			fmt.Scan(&(*T)[totalPenduduk].namaPenduduk)
+			fmt.Print("Alamat Penduduk: ")
+			fmt.Scan(&(*T)[totalPenduduk].alamatRumah)
+			fmt.Print("Umur: ")
+			fmt.Scan(&(*T)[totalPenduduk].umurPenduduk)
+			fmt.Print("RT: ")
+			fmt.Scan(&(*T)[totalPenduduk].noRT)
+			fmt.Print("RW: ")
+			fmt.Scan(&(*T)[totalPenduduk].noRW)
+			fmt.Print("Masukkan Nomor NIK: ")
+			fmt.Scan(&(*T)[totalPenduduk].noNIK)
+			fmt.Print("Status Kawin?: ")
+			fmt.Scan(&(*T)[totalPenduduk].statusPerkawinan)
+			totalPenduduk++
+		}
 	}
+	*nPenduduk = totalPenduduk
 }
 
 // Function to Search Data
@@ -197,8 +206,8 @@ func cariData(T tabPenduduk, n int) {
 		i := 0
 		found := false
 		for i < n {
-			if T[i].penduduk.namaPenduduk == namaDicari {
-				fmt.Printf("Data Ditemukan: %+v\n", T[i].penduduk)
+			if T[i].namaPenduduk == namaDicari {
+				fmt.Printf("Data Ditemukan: %+v\n", T[i])
 				found = true
 			}
 			i++
@@ -213,8 +222,8 @@ func cariData(T tabPenduduk, n int) {
 		i := 0
 		found := false
 		for i < n {
-			if T[i].penduduk.noNIK == nomorNIK {
-				fmt.Printf("Data Ditemukan: %+v\n", T[i].penduduk)
+			if T[i].noNIK == nomorNIK {
+				fmt.Printf("Data Ditemukan: %+v\n", T[i])
 				found = true
 			}
 			i++
@@ -228,23 +237,23 @@ func cariData(T tabPenduduk, n int) {
 }
 
 // Function to Print Data
-func cetakData(T tabPenduduk, n int) {
+func cetakData(T tabPenduduk, K tabDesa, nDesa, nPenduduk int) {
 	fmt.Println("================================")
 	fmt.Println("DATA PENDUDUK DESA")
 	fmt.Println("================================")
-	for i := 0; i < n; i++ {
+	for i := 0; i < nDesa; i++ {
 		fmt.Printf("Data Desa Ke-%d\n", i+1)
-		fmt.Printf("Nama Desa: %s\n", T[i].namaDesa)
-		fmt.Printf("Alamat Desa: %s\n", T[i].alamatDesa)
-		fmt.Printf("Jumlah RT: %d\n", T[i].jumlahRT)
-		fmt.Printf("Jumlah RW: %d\n", T[i].jumlahRW)
-		fmt.Printf("Nama Penduduk: %s\n", T[i].penduduk.namaPenduduk)
-		fmt.Printf("Alamat Penduduk: %s\n", T[i].penduduk.alamatRumah)
-		fmt.Printf("Umur: %d\n", T[i].penduduk.umurPenduduk)
-		fmt.Printf("RT: %d\n", T[i].penduduk.noRT)
-		fmt.Printf("RW: %d\n", T[i].penduduk.noRW)
-		fmt.Printf("Nomor NIK: %d\n", T[i].penduduk.noNIK)
-		fmt.Printf("Status Kawin: %s\n", T[i].penduduk.statusPerkawinan)
+		fmt.Printf("Nama Desa: %s\n", K[i].namaDesa)
+		fmt.Printf("Alamat Desa: %s\n", K[i].alamatDesa)
+		fmt.Printf("Jumlah RT: %d\n", K[i].jumlahRT)
+		fmt.Printf("Jumlah RW: %d\n", K[i].jumlahRW)
 		fmt.Println("================================")
+		for j := 0; j < nPenduduk; j++ {
+			if T[j].alamatRumah == K[i].alamatDesa { // Assuming the address matches the village
+				fmt.Printf("Nama Penduduk: %s\n", T[j].namaPenduduk)
+				fmt.Printf("Alamat Penduduk: %s\n", T[j].alamatRumah)
+				fmt.Printf("Umur: %d\n", T[j])
+			}
+		}
 	}
 }
