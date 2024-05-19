@@ -236,24 +236,25 @@ func cariData(T tabPenduduk, n int) {
 	}
 }
 
-// Function to Print Data
-func cetakData(T tabPenduduk, K tabDesa, nDesa, nPenduduk int) {
-	fmt.Println("================================")
-	fmt.Println("DATA PENDUDUK DESA")
-	fmt.Println("================================")
-	for i := 0; i < nDesa; i++ {
-		fmt.Printf("Data Desa Ke-%d\n", i+1)
-		fmt.Printf("Nama Desa: %s\n", K[i].namaDesa)
-		fmt.Printf("Alamat Desa: %s\n", K[i].alamatDesa)
-		fmt.Printf("Jumlah RT: %d\n", K[i].jumlahRT)
-		fmt.Printf("Jumlah RW: %d\n", K[i].jumlahRW)
-		fmt.Println("================================")
-		for j := 0; j < nPenduduk; j++ {
-			if T[j].alamatRumah == K[i].alamatDesa { // Assuming the address matches the village
-				fmt.Printf("Nama Penduduk: %s\n", T[j].namaPenduduk)
-				fmt.Printf("Alamat Penduduk: %s\n", T[j].alamatRumah)
-				fmt.Printf("Umur: %d\n", T[j])
-			}
-		}
-	}
-}
+// FUNGSI CETAK DATA
+
+// func cetakData(T tabPenduduk, K tabDesa, nDesa, nPenduduk int) {
+// 	fmt.Println("================================")
+// 	fmt.Println("DATA PENDUDUK DESA")
+// 	fmt.Println("================================")
+// 	for i := 0; i < nDesa; i++ {
+// 		fmt.Printf("Data Desa Ke-%d\n", i+1)
+// 		fmt.Printf("Nama Desa: %s\n", K[i].namaDesa)
+// 		fmt.Printf("Alamat Desa: %s\n", K[i].alamatDesa)
+// 		fmt.Printf("Jumlah RT: %d\n", K[i].jumlahRT)
+// 		fmt.Printf("Jumlah RW: %d\n", K[i].jumlahRW)
+// 		fmt.Println("================================")
+// 		for j := 0; j < nPenduduk; j++ {
+// 			if T[j].alamatRumah == K[i].alamatDesa { // Assuming the address matches the village
+// 				fmt.Printf("Nama Penduduk: %s\n", T[j].namaPenduduk)
+// 				fmt.Printf("Alamat Penduduk: %s\n", T[j].alamatRumah)
+// 				fmt.Printf("Umur: %d\n", T[j])
+// 			}
+// 		}
+// 	}
+// }
