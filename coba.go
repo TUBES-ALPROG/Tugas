@@ -276,3 +276,42 @@
 //     }
 // }
 
+
+func ubahStatusPerkawinan(K tabDesa, nDesa, nPenduduk int) {
+    fmt.Println("================================")
+    fmt.Println("PERUBAHAN STATUS PERKAWINAN")
+    fmt.Println("================================")
+    fmt.Print("Masukkan Nomor NIK penduduk: ")
+    fmt.Scan(&nomorNIK)
+
+    found := false
+    for i := 0; i < nDesa; i++ {
+        for j := 0; j < nPenduduk; j++ {
+            if K[i].penduduk[j].noNIK == nomorNIK {
+				fmt.Printf("Data Penduduk Ditemukan:\n")
+				fmt.Printf("%-20s%-20s%-10s%-5s%-5s%-15s%-20s\n", "Nama Penduduk", "Umur", "Alamat", "RT", "RW", "NIK", "Status Perkawinan")
+				fmt.Printf("%-20s%-20s%-10d%-5d%-5d%-15d%-20s\n", K[i].penduduk[j].namaPenduduk, K[i].penduduk[j].alamatRumah, K[i].penduduk[j].umurPenduduk, K[i].penduduk[j].noRT, K[i].penduduk[j].noRW, K[i].penduduk[j].noNIK, K[i].penduduk[j].statusPerkawinan)
+
+				fmt.Print("Masukkan status perkawinan baru: ")
+				var newStatus string
+				fmt.Scan(&newStatus)
+
+				K[i].penduduk.K[j].statusPerkawinan = newStatus
+				fmt.Println("Status perkawinan berhasil diubah.")
+				found = true
+				break
+			}
+            if found {
+                break
+            }
+        }
+        if found {
+            break
+        }
+    }
+    if !found {
+        fmt.Println("Data Penduduk dengan NIK tersebut tidak ditemukan.")
+    }
+}
+
+

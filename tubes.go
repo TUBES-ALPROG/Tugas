@@ -42,9 +42,9 @@ var namaDicari string
 var pilih, nomorNIK int
 
 func main() {
-	var input Login
-	login(&input)
-	loading()
+	// var input Login
+	// login(&input)
+	// loading()
     menu()
 }
 
@@ -79,7 +79,9 @@ func menu() {
         //  Implement Edit Data
         case 5:
             cetakData(dataD, nDesa ,nPenduduk)
-        case 6:
+		case 6:
+			ubahStatusPerkawinan(&dataD, nDesa, nPenduduk)
+        case 7:
             shouldExit = true
             fmt.Println("================================")
             fmt.Println("TERIMA KASIH")
@@ -276,3 +278,88 @@ func cariData(K tabDesa, nDesa, nPenduduk int) {
     }
 }
 
+// -------FUNGSI UNTUK MENGUBAH STATUS PERKAWINAN (MASIH SALAH)---------
+func ubahStatusPerkawinan(K *tabDesa, nDesa, nPenduduk int) {
+    fmt.Println("================================")
+    fmt.Println("PERUBAHAN STATUS PERKAWINAN")
+    fmt.Println("================================")
+    fmt.Print("Masukkan Nomor NIK penduduk: ")
+    fmt.Scan(&nomorNIK)
+
+    found := false
+    for i := 0; i < nDesa; i++ {
+        for j := 0; j < nPenduduk; j++ {
+            if (*K)[i].penduduk[j].noNIK == nomorNIK {
+				fmt.Printf("Data Penduduk Ditemukan:\n")
+				fmt.Printf("%-20s%-20s%-10s%-5s%-5s%-15s%-20s\n", "Nama Penduduk", "Umur", "Alamat", "RT", "RW", "NIK", "Status Perkawinan")
+				fmt.Printf("%-20s%-20s%-10d%-5d%-5d%-15d%-20s\n", (*K)[i].penduduk[j].namaPenduduk, (*K)[i].penduduk[j].alamatRumah, (*K)[i].penduduk[j].umurPenduduk, (*K)[i].penduduk[j].noRT, (*K)[i].penduduk[j].noRW, (*K)[i].penduduk[j].noNIK, (*K)[i].penduduk[j].statusPerkawinan)
+
+				fmt.Print("Masukkan status perkawinan baru: ")
+				var newStatus string
+				fmt.Scan(&newStatus)
+
+				(*K)[i].penduduk[j].statusPerkawinan = newStatus
+				fmt.Println("Status perkawinan berhasil diubah.")
+				found = true
+			}
+        }
+    }
+    if !found {
+        fmt.Println("Data Penduduk dengan NIK tersebut tidak ditemukan.")
+    }
+}
+
+// func editData(K *tabDesa, nDesa, nPenduduk int) {
+//     fmt.Println("================================")
+//     fmt.Println("PENCARIAN DATA PENDUDUK DESA")
+//     fmt.Println("================================")
+//     fmt.Println("MENU PILIHAN PENCARIAN")
+//     fmt.Println("1. Nama")
+//     fmt.Println("2. NIK")
+//     fmt.Println("3. EXIT")
+//     fmt.Print("Pilih: ")
+//     fmt.Scan(&pilih)
+
+//     var searchField string
+//     switch pilih {
+//     case 1:
+//         searchField = "Nama"
+//     case 2:
+//         searchField = "NIK"
+//     case 3:
+//         return
+//     }
+
+//     fmt.Println("================================")
+//     fmt.Printf("Masukkan %s: ", searchField)
+//     var searchQuery string
+//     fmt.Scan(&searchQuery)
+
+
+//     found := false
+//     for i := 0; i < nDesa; i++ {
+//         for j := 0; j < nPenduduk; j++ {
+//             var data dataPenduduk
+//                 if K[i].penduduk[j].namaPenduduk == {
+//                     data = (*K)[i].penduduk[j*K[i].jumlahRW+k]
+//                 } else {
+//                     data = K[i].penduduk[j*K[i].jumlahRW+k]
+//                 }
+
+//                 var match bool
+//                 if pilih == 1 {
+//                     match = data.namaPenduduk == searchQuery
+//                 } else {
+//                     match = data.noNIK == nomorNIK
+//                 }
+
+//                 if match {
+//                     fmt.Printf("Data Ditemukan: %+v\n", data)
+//                     found = true
+//                 }
+//         }
+//     }
+//     if !found {
+//         fmt.Println("Data Tidak Ada")
+//     }
+// }
