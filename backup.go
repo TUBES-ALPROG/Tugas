@@ -1,5 +1,3 @@
-
-
 // package main
 
 // import (
@@ -19,7 +17,6 @@
 //     alamatDesa string
 //     jumlahRt   int
 //     jumlahRw   int
-// 	pendapatanUMKM int
 //     penduduk   [NMAX]dataPenduduk // Penambahan slice untuk menyimpan penduduk
 // }
 
@@ -31,7 +28,6 @@
 //     noRW             int
 //     noNIK            int
 //     statusPerkawinan string
-// 	pendudukUMKM int
 // }
 
 // 	type Login struct {
@@ -68,8 +64,7 @@
 //         fmt.Println("3. Hapus Data")
 //         fmt.Println("4. Edit Data")
 //         fmt.Println("5. Cetak Data")
-//         fmt.Println("6. UMKM")
-//         fmt.Println("7. Exit")
+//         fmt.Println("6. Exit")
 //         fmt.Println()
 //         fmt.Print("Pilih:")
 //         fmt.Scan(&pilih)
@@ -91,10 +86,7 @@
 //         case 5:
 //             clearScreen()
 //             cetakData(dataD, nDesa ,nPenduduk)
-// 		case 6:
-//             clearScreen()
-//             tambahUMKM(&dataD, nDesa)
-//         case 7:
+//         case 6:
 //             shouldExit = true
 //             fmt.Println("================================")
 //             fmt.Println("TERIMA KASIH")
@@ -224,8 +216,6 @@
 //     /* {I.S. ___ 
 //         F.S. ___}
 //     */
-// 	fmt.Println("================================")
-// 	loading()
 //     fmt.Println("================================")
 //     fmt.Println("CETAK DATA PENDUDUK DESA")
 //     fmt.Println("================================")
@@ -236,7 +226,6 @@
 //         fmt.Printf("Alamat Desa: %s\n", K[i].alamatDesa)
 //         fmt.Printf("Jumlah RT: %d\n", K[i].jumlahRt)
 //         fmt.Printf("Jumlah RW: %d\n", K[i].jumlahRw)
-//         fmt.Printf("Pendapatan UMKM Desa: %d\n", K[i].pendapatanUMKM)
 //         fmt.Println("================================")
 
 //         fmt.Printf("%-20s%-10s%-20s%-5s%-5s%-15s%-20s\n", "Nama Penduduk", "Umur", "Alamat", "RT", "RW", "NIK", "Status Perkawinan")
@@ -295,8 +284,6 @@
 //                 }
 
 //                 if match {
-// 					fmt.Println("================================")
-// 				    loading()
 //                     fmt.Printf("Data Ditemukan: %+v\n", data)
 					
 //                     found = true
@@ -399,9 +386,6 @@
 //                     fmt.Scan(&rw)
 //                     fmt.Print("NIK: ")
 //                     fmt.Scan(&NIK)
-// 					fmt.Println("================================")
-
-// 				    loading()
 //                     fmt.Println("Data Berhasil Diubah!")
 //                     T[i].penduduk[j].namaPenduduk = nama
 //                     T[i].penduduk[j].umurPenduduk = umur
@@ -436,9 +420,7 @@
 // 				fmt.Print("Masukkan status perkawinan baru: ")
 // 				var newStatus string
 // 				fmt.Scan(&newStatus)
-// 				fmt.Println("================================")
 
-// 				loading()
 // 				(*K)[i].penduduk[j].statusPerkawinan = newStatus
 // 				fmt.Println("Status perkawinan berhasil diubah.")
 // 				found = true
@@ -450,7 +432,6 @@
 //     }
 // }
 
-// // ------FUNGSI MENGHAPUS DATA (BELUM SELESAI)-----
 // func deleteData(T *tabDesa, nDesa, nPenduduk *int){
 //     var nama_desa, nama string
 //     fmt.Println("================================")
@@ -469,22 +450,34 @@
 //         fmt.Scan(&nama_desa)
 //         for i := 0; i < *nDesa; i++{
 //             if T[i].namaDesa == nama_desa {
-//                 // Memindahkan data desa ke atas
-//                 for k := i; k < *nDesa - 1; k++ {
-//                     T[k] = T[k+1]
+//                 for k := i; k < *nDesa - 1; k++{
+//                     T[k].namaDesa = T[k+1].namaDesa
+//                     T[k].alamatDesa = T[k+1].alamatDesa
+//                     T[k].jumlahRt = T[k+1].jumlahRt
+//                     T[k].jumlahRw = T[k+1].jumlahRw
 //                 }
+//                 T[*nDesa] = T[*nDesa - 1]
 //                 *nDesa--
 //                 found = true
 //             }
-//         }
+//     }
 //     case 2:
 //         fmt.Println("Masukan Nama Penduduk: ")
 //         fmt.Scan(&nama)
 //         for i := 0; i < *nDesa; i++ {
-//             for j := 0; j < *nPenduduk; j++ {
+//             for j := 0; j < len(T[i].penduduk); j++ {
 //                 if T[i].penduduk[j].namaPenduduk == nama {
-//                     // Memindahkan data penduduk ke atas
-//                         T[i].penduduk[j] = T[i].penduduk[j+1]
+//                     for k := j; k < len(T[i].penduduk) - 1; k++{
+//                         T[i].penduduk[k].namaPenduduk = T[i].penduduk[k+1].namaPenduduk
+//                         T[i].penduduk[k].alamatRumah = T[i].penduduk[k+1].alamatRumah
+//                         T[i].penduduk[k].umurPenduduk = T[i].penduduk[k+1].umurPenduduk
+//                         T[i].penduduk[k].noRT = T[i].penduduk[k+1].noRT
+//                         T[i].penduduk[k].noRW = T[i].penduduk[k+1].noRW
+//                         T[i].penduduk[k].noNIK = T[i].penduduk[k+1].noNIK
+//                         T[i].penduduk[k].statusPerkawinan = T[i].penduduk[k+1].statusPerkawinan
+//                     }
+                    
+//                     *nPenduduk--
 //                     found = true
 //                 }
 //             }
@@ -492,7 +485,7 @@
 //     case 3:
 //         return
 //     }
-
+    
 //     if !found {
 //         fmt.Println("Data Tidak Ada")
 //     }
@@ -534,7 +527,6 @@
 // 	} 
 // }
 
-
 // func clearScreen() {
 // 	var cmd *exec.Cmd
 // 	cmd = exec.Command("cmd", "/c", "cls")
@@ -547,4 +539,3 @@
 // 	scanner := bufio.NewReader(os.Stdin)
 // 	scanner.ReadBytes('\n')
 // }
-

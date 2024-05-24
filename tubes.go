@@ -1,3 +1,5 @@
+
+
 package main
 
 import (
@@ -17,6 +19,7 @@ type dataDesa struct {
     alamatDesa string
     jumlahRt   int
     jumlahRw   int
+	pendapatanUMKM int
     penduduk   [NMAX]dataPenduduk // Penambahan slice untuk menyimpan penduduk
 }
 
@@ -28,6 +31,7 @@ type dataPenduduk struct {
     noRW             int
     noNIK            int
     statusPerkawinan string
+	pendudukUMKM int
 }
 
 	type Login struct {
@@ -64,7 +68,8 @@ func menu() {
         fmt.Println("3. Hapus Data")
         fmt.Println("4. Edit Data")
         fmt.Println("5. Cetak Data")
-        fmt.Println("6. Exit")
+        fmt.Println("6. UMKM")
+        fmt.Println("7. Exit")
         fmt.Println()
         fmt.Print("Pilih:")
         fmt.Scan(&pilih)
@@ -86,7 +91,10 @@ func menu() {
         case 5:
             clearScreen()
             cetakData(dataD, nDesa ,nPenduduk)
-        case 6:
+		case 6:
+            clearScreen()
+            tambahUMKM(&dataD, nDesa)
+        case 7:
             shouldExit = true
             fmt.Println("================================")
             fmt.Println("TERIMA KASIH")
@@ -216,6 +224,8 @@ func cetakData(K tabDesa, nDesa, nPenduduk int) {
     /* {I.S. ___ 
         F.S. ___}
     */
+	fmt.Println("================================")
+	loading()
     fmt.Println("================================")
     fmt.Println("CETAK DATA PENDUDUK DESA")
     fmt.Println("================================")
@@ -226,6 +236,7 @@ func cetakData(K tabDesa, nDesa, nPenduduk int) {
         fmt.Printf("Alamat Desa: %s\n", K[i].alamatDesa)
         fmt.Printf("Jumlah RT: %d\n", K[i].jumlahRt)
         fmt.Printf("Jumlah RW: %d\n", K[i].jumlahRw)
+        fmt.Printf("Pendapatan UMKM Desa: %d\n", K[i].pendapatanUMKM)
         fmt.Println("================================")
 
         fmt.Printf("%-20s%-10s%-20s%-5s%-5s%-15s%-20s\n", "Nama Penduduk", "Umur", "Alamat", "RT", "RW", "NIK", "Status Perkawinan")
@@ -284,6 +295,8 @@ func cariData(K tabDesa, nDesa, nPenduduk int) {
                 }
 
                 if match {
+					fmt.Println("================================")
+				    loading()
                     fmt.Printf("Data Ditemukan: %+v\n", data)
 					
                     found = true
@@ -386,6 +399,9 @@ func editData(T *tabDesa, nDesa, nPenduduk int) {
                     fmt.Scan(&rw)
                     fmt.Print("NIK: ")
                     fmt.Scan(&NIK)
+					fmt.Println("================================")
+
+				    loading()
                     fmt.Println("Data Berhasil Diubah!")
                     T[i].penduduk[j].namaPenduduk = nama
                     T[i].penduduk[j].umurPenduduk = umur
@@ -420,7 +436,9 @@ func ubahStatusPerkawinan(K *tabDesa, nDesa, nPenduduk int) {
 				fmt.Print("Masukkan status perkawinan baru: ")
 				var newStatus string
 				fmt.Scan(&newStatus)
+				fmt.Println("================================")
 
+				loading()
 				(*K)[i].penduduk[j].statusPerkawinan = newStatus
 				fmt.Println("Status perkawinan berhasil diubah.")
 				found = true
@@ -489,6 +507,42 @@ func deleteData(T *tabDesa, nDesa, nPenduduk *int){
     if !found {
         fmt.Println("Data Tidak Ada")
     }
+}
+
+// -------FUNGSI UNTUK MENAMBAH DATA UMKM---------
+func tambahUMKM(K *tabDesa, nDesa int) {
+	var namaDesa, namaUMKM string
+	var found bool
+	var pendapatanUMKM int
+
+	fmt.Println("================================")
+	fmt.Println("Tambah Data UMKM")
+	fmt.Println("================================")
+	fmt.Print("Masukkan Nama Desa: ")
+	fmt.Scan(&namaDesa)
+
+	for i := 0; i < nDesa; i++ {
+		if K[i].namaDesa == namaDesa {
+			fmt.Printf("Data Desa Ditemukan: %+v\n", K[i].namaDesa)
+			fmt.Print("Nama UMKM: ")
+			fmt.Scan(&namaUMKM)
+			scanner := bufio.NewScanner(os.Stdin)
+			scanner.Scan()
+			namaUMKM = scanner.Text()
+			fmt.Print("Pendapatan UMKM: ")
+			fmt.Scan(&K[i].pendapatanUMKM)
+			K[i].pendapatanUMKM += pendapatanUMKM
+			fmt.Println("================================")
+
+			loading()
+			fmt.Println("Data UMKM berhasil ditambahkan.")
+			found = true
+		}
+	}
+
+	if !found {
+		fmt.Println("Data Desa tidak ditemukan.")
+	} 
 }
 
 func clearScreen() {
