@@ -241,7 +241,10 @@ func cetakData(K tabDesa, nDesa, nPenduduk int) {
 
         fmt.Printf("%-20s%-10s%-20s%-5s%-5s%-15s%-20s\n", "Nama Penduduk", "Umur", "Alamat", "RT", "RW", "NIK", "Status Perkawinan")
         for j := 0; j < nPenduduk; j++ {
-            fmt.Printf("%-20s%-10d%-20s%-5d%-5d%-15d%-20s\n", K[i].penduduk[j].namaPenduduk, K[i].penduduk[j].umurPenduduk, K[i].penduduk[j].alamatRumah, K[i].penduduk[j].noRT, K[i].penduduk[j].noRW, K[i].penduduk[j].noNIK, K[i].penduduk[j].statusPerkawinan)
+            fmt.Printf("%-20s%-10d%-20s%-5d%-5d%-15d%-20s\n", 
+            K[i].penduduk[j].namaPenduduk, K[i].penduduk[j].umurPenduduk, 
+            K[i].penduduk[j].alamatRumah, K[i].penduduk[j].noRT, K[i].penduduk[j].noRW, 
+            K[i].penduduk[j].noNIK, K[i].penduduk[j].statusPerkawinan)
         }
         fmt.Println("================================")
     }
@@ -418,6 +421,7 @@ func editData(T *tabDesa, nDesa, nPenduduk int) {
     }
 }
 
+// -------FUNGSI UBAH STATUS PERKAWINAN PENDUDUK--------
 func ubahStatusPerkawinan(K *tabDesa, nDesa, nPenduduk int) {
     fmt.Println("================================")
     fmt.Println("PERUBAHAN STATUS PERKAWINAN")
@@ -431,7 +435,9 @@ func ubahStatusPerkawinan(K *tabDesa, nDesa, nPenduduk int) {
             if K[i].penduduk[j].noNIK == nomorNIK {
 				fmt.Printf("Data Penduduk Ditemukan:\n")
 				fmt.Printf("%-20s%-20s%-10s%-5s%-5s%-15s%-20s\n", "Nama Penduduk", "Umur", "Alamat", "RT", "RW", "NIK", "Status Perkawinan")
-				fmt.Printf("%-20s%-20s%-10d%-5d%-5d%-15d%-20s\n", (*K)[i].penduduk[j].namaPenduduk, (*K)[i].penduduk[j].alamatRumah, (*K)[i].penduduk[j].umurPenduduk, (*K)[i].penduduk[j].noRT, (*K)[i].penduduk[j].noRW, (*K)[i].penduduk[j].noNIK, (*K)[i].penduduk[j].statusPerkawinan)
+				fmt.Printf("%-20s%-20s%-10d%-5d%-5d%-15d%-20s\n", (*K)[i].penduduk[j].namaPenduduk, 
+                (*K)[i].penduduk[j].alamatRumah, (*K)[i].penduduk[j].umurPenduduk, (*K)[i].penduduk[j].noRT, 
+                (*K)[i].penduduk[j].noRW, (*K)[i].penduduk[j].noNIK, (*K)[i].penduduk[j].statusPerkawinan)
 
 				fmt.Print("Masukkan status perkawinan baru: ")
 				var newStatus string
