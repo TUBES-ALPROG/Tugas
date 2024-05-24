@@ -47,7 +47,7 @@ var pilih, nomorNIK int
 func main() {
 	// var input Login
 	// login(&input)
-	loading()
+	//loading()
     menu()
 }
 
@@ -172,7 +172,8 @@ func inputData(K *tabDesa, nDesa, nPendudukDesa *int) {
         F.S. ___}
     */
 	fmt.Println("================================")
-	fmt.Println("SILAHKAN MASUKKAN DATA PENDUDUK")
+    fmt.Printf("%18s\n", "SI DESA")
+	fmt.Printf("%29s\n","INPUT DATA DESA & PENDUDUK")
 	fmt.Println("================================")
 	fmt.Print("Masukkan jumlah Desa: ")
 	fmt.Scan(nDesa)
@@ -217,7 +218,8 @@ func cetakData(K tabDesa, nDesa, nPenduduk int) {
         F.S. ___}
     */
     fmt.Println("================================")
-    fmt.Println("CETAK DATA PENDUDUK DESA")
+    fmt.Printf("%18s\n", "SI DESA")
+    fmt.Printf("%28s\n","CETAK DATA PENDUDUK DESA")
     fmt.Println("================================")
 
     for i := 0; i < nDesa; i++ {
@@ -227,12 +229,12 @@ func cetakData(K tabDesa, nDesa, nPenduduk int) {
         fmt.Printf("Jumlah RT: %d\n", K[i].jumlahRt)
         fmt.Printf("Jumlah RW: %d\n", K[i].jumlahRw)
         fmt.Println("================================")
-
         fmt.Printf("%-20s%-10s%-20s%-5s%-5s%-15s%-20s\n", "Nama Penduduk", "Umur", "Alamat", "RT", "RW", "NIK", "Status Perkawinan")
         for j := 0; j < nPenduduk; j++ {
             fmt.Printf("%-20s%-10d%-20s%-5d%-5d%-15d%-20s\n", K[i].penduduk[j].namaPenduduk, K[i].penduduk[j].umurPenduduk, K[i].penduduk[j].alamatRumah, K[i].penduduk[j].noRT, K[i].penduduk[j].noRW, K[i].penduduk[j].noNIK, K[i].penduduk[j].statusPerkawinan)
         }
         fmt.Println("================================")
+        fmt.Println("")
     }
 }
 
@@ -370,8 +372,8 @@ func editData(T *tabDesa, nDesa, nPenduduk int) {
                     found = true
                 } else if pendudukMatch {
                     fmt.Printf("Data Penduduk Ditemukan:\n")
-				    fmt.Printf("%-20s%-20s%-10s%-5s%-5s%-15s%-20s\n", "Nama Penduduk", "Umur", "Alamat", "RT", "RW", "NIK", "Status Perkawinan")
-				    fmt.Printf("%-20s%-20s%-10d%-5d%-5d%-15d%-20s\n", T[i].penduduk[j].namaPenduduk, T[i].penduduk[j].alamatRumah, T[i].penduduk[j].umurPenduduk, T[i].penduduk[j].noRT, T[i].penduduk[j].noRW, T[i].penduduk[j].noNIK, T[i].penduduk[j].statusPerkawinan)
+				    fmt.Printf("%-20s%-10s%-20s%-5s%-5s%-15s%-20s\n", "Nama Penduduk", "Umur", "Alamat", "RT", "RW", "NIK", "Status Perkawinan")
+				    fmt.Printf("%-20s%-10d%-20s%-5d%-5d%-15d%-20s\n", T[i].penduduk[j].namaPenduduk, T[i].penduduk[j].umurPenduduk, T[i].penduduk[j].alamatRumah, T[i].penduduk[j].noRT, T[i].penduduk[j].noRW, T[i].penduduk[j].noNIK, T[i].penduduk[j].statusPerkawinan)
                     fmt.Println("")
                     fmt.Println("Masukan data penduduk yang ingin diubah: ")
                     fmt.Print("Nama: ")
@@ -414,8 +416,8 @@ func ubahStatusPerkawinan(K *tabDesa, nDesa, nPenduduk int) {
         for j := 0; j < nPenduduk; j++ {
             if K[i].penduduk[j].noNIK == nomorNIK {
 				fmt.Printf("Data Penduduk Ditemukan:\n")
-				fmt.Printf("%-20s%-20s%-10s%-5s%-5s%-15s%-20s\n", "Nama Penduduk", "Umur", "Alamat", "RT", "RW", "NIK", "Status Perkawinan")
-				fmt.Printf("%-20s%-20s%-10d%-5d%-5d%-15d%-20s\n", (*K)[i].penduduk[j].namaPenduduk, (*K)[i].penduduk[j].alamatRumah, (*K)[i].penduduk[j].umurPenduduk, (*K)[i].penduduk[j].noRT, (*K)[i].penduduk[j].noRW, (*K)[i].penduduk[j].noNIK, (*K)[i].penduduk[j].statusPerkawinan)
+				fmt.Printf("%-20s%-10s%-20s%-5s%-5s%-15s%-20s\n", "Nama Penduduk", "Umur", "Alamat", "RT", "RW", "NIK", "Status Perkawinan")
+				fmt.Printf("%-20s%-10d%-20s%-5d%-5d%-15d%-20s\n", (*K)[i].penduduk[j].namaPenduduk, (*K)[i].penduduk[j].umurPenduduk, (*K)[i].penduduk[j].alamatRumah, (*K)[i].penduduk[j].noRT, (*K)[i].penduduk[j].noRW, (*K)[i].penduduk[j].noNIK, (*K)[i].penduduk[j].statusPerkawinan)
 
 				fmt.Print("Masukkan status perkawinan baru: ")
 				var newStatus string
@@ -465,9 +467,9 @@ func deleteData(T *tabDesa, nDesa, nPenduduk *int){
         fmt.Println("Masukan Nama Penduduk: ")
         fmt.Scan(&nama)
         for i := 0; i < *nDesa; i++ {
-            for j := 0; j < len(T[i].penduduk); j++ {
+            for j := 0; j < *nPenduduk; j++ {
                 if T[i].penduduk[j].namaPenduduk == nama {
-                    for k := j; k < len(T[i].penduduk) - 1; k++{
+                    for k := j; k < *nPenduduk - 1; k++{
                         T[i].penduduk[k].namaPenduduk = T[i].penduduk[k+1].namaPenduduk
                         T[i].penduduk[k].alamatRumah = T[i].penduduk[k+1].alamatRumah
                         T[i].penduduk[k].umurPenduduk = T[i].penduduk[k+1].umurPenduduk
@@ -476,7 +478,7 @@ func deleteData(T *tabDesa, nDesa, nPenduduk *int){
                         T[i].penduduk[k].noNIK = T[i].penduduk[k+1].noNIK
                         T[i].penduduk[k].statusPerkawinan = T[i].penduduk[k+1].statusPerkawinan
                     }
-                    
+
                     *nPenduduk--
                     found = true
                 }
