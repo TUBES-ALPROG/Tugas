@@ -47,7 +47,7 @@ var pilih, nomorNIK int
 func main() {
 	// var input Login
 	// login(&input)
-	// loading()
+	loading()
     menu()
 }
 
@@ -78,17 +78,15 @@ func menu() {
         case 2:
             clearScreen()
             cariData(dataD, nDesa, nPenduduk)
-        // case 3:
-        //  Implement Hapus Data
+        case 3:
+            deleteData(&dataD, &nDesa, &nPenduduk)
          case 4:
             clearScreen()
             editData(&dataD, nDesa, nPenduduk)
         case 5:
             clearScreen()
             cetakData(dataD, nDesa ,nPenduduk)
-		case 6:
-			ubahStatusPerkawinan(&dataD, nDesa, nPenduduk)
-        case 7:
+        case 6:
             shouldExit = true
             fmt.Println("================================")
             fmt.Println("TERIMA KASIH")
@@ -436,7 +434,6 @@ func ubahStatusPerkawinan(K *tabDesa, nDesa, nPenduduk int) {
 
 func deleteData(T *tabDesa, nDesa, nPenduduk *int){
     var nama_desa, nama string
-    var searchQuery string
     fmt.Println("================================")
     fmt.Println("Menu Edit Data")
 	fmt.Println("1. Hapus Desa")
@@ -445,42 +442,50 @@ func deleteData(T *tabDesa, nDesa, nPenduduk *int){
 	fmt.Println("================================")
 	fmt.Println("Pilih: ")
 	fmt.Scan(&pilih)
-
+    
+    found := false
 	switch pilih {
     case 1:
         fmt.Print("Masukan Nama Desa: ")
         fmt.Scan(&nama_desa)
+        for i := 0; i < *nDesa; i++{
+            if T[i].namaDesa == nama_desa {
+                for k := i; k < *nDesa - 1; k++{
+                    T[k].namaDesa = T[k+1].namaDesa
+                    T[k].alamatDesa = T[k+1].alamatDesa
+                    T[k].jumlahRt = T[k+1].jumlahRt
+                    T[k].jumlahRw = T[k+1].jumlahRw
+                }
+                T[*nDesa] = T[*nDesa - 1]
+                *nDesa--
+                found = true
+            }
+    }
     case 2:
         fmt.Println("Masukan Nama Penduduk: ")
         fmt.Scan(&nama)
+        for i := 0; i < *nDesa; i++ {
+            for j := 0; j < len(T[i].penduduk); j++ {
+                if T[i].penduduk[j].namaPenduduk == nama {
+                    for k := j; k < len(T[i].penduduk) - 1; k++{
+                        T[i].penduduk[k].namaPenduduk = T[i].penduduk[k+1].namaPenduduk
+                        T[i].penduduk[k].alamatRumah = T[i].penduduk[k+1].alamatRumah
+                        T[i].penduduk[k].umurPenduduk = T[i].penduduk[k+1].umurPenduduk
+                        T[i].penduduk[k].noRT = T[i].penduduk[k+1].noRT
+                        T[i].penduduk[k].noRW = T[i].penduduk[k+1].noRW
+                        T[i].penduduk[k].noNIK = T[i].penduduk[k+1].noNIK
+                        T[i].penduduk[k].statusPerkawinan = T[i].penduduk[k+1].statusPerkawinan
+                    }
+                    
+                    *nPenduduk--
+                    found = true
+                }
+            }
+        }
     case 3:
         return
     }
-
-    found := false
-    for i := 0; i < *nDesa; i++ { 
-        for j := 0; j < *nPenduduk; j++ {
-            var data bool
-                 if pilih == 1 {
-                     data = T[i].namaDesa
-                 } else {
-                     data = T[i].penduduk[j].namaPenduduk
-                 }
-
-                var match bool
-                if pilih == 1 {
-                    match = data.namaPenduduk == searchQuery
-                } else {
-                    match = data.noNIK == nomorNIK
-                }
-
-                if match {
-                    fmt.Printf("Data Ditemukan: %+v\n", data)
-					
-                    found = true
-                }
-        }
-    }
+    
     if !found {
         fmt.Println("Data Tidak Ada")
     }
