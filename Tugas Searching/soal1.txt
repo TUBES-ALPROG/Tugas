@@ -1,0 +1,91 @@
+const nMAx = 37
+type tHimpunan: <
+   anggota : array[1..nMax]of integer
+   panjang : integer
+>
+
+procedure input(in/out set : tHimpunan)
+{I.S data himpunan telah siap pada piranti masukkan
+ F.S array anggota dari set berisi sejumlah bilangan}
+ Kamus
+ Algoritma
+    input(set.panjang)
+    for i <- 1 to set.panjang do
+        output("Anggota Himpunan 1: )
+        input(set[i].anggota)
+    endfor
+    for j <- 1 to set.panjang do
+        output("Anggota Himpunan 2: )
+        input(set[j].anggota)
+    endfor
+endProcedure
+
+function ada(set : tHimpunan, x : integer) -> boolean
+{mengembalikan true apabila x ada di dalam array anggota dari set, atau false apabila sebaliknya}
+Kamus
+Algoritma
+    nData <- set.panjang
+    found <- false
+    i <- 1
+    for i < set.panjang do
+        if set[i].anggota == x then
+           found <- true 
+        endif
+    endfor
+    return found
+endfunction
+
+procedure urut(in/out set : tHimpunan)
+{I.S terdefinisi himpunan set
+F.S array anggota dari set terurut menggunakan algoritma Selection Sort (ascending/descending)}
+Kamus
+   Pass, idx_min, k, temp : integer
+Algoritma
+   Pass <- 1
+   while Pass <= set.panjang - 1 do
+      idx_min <- Pass
+           k  <- Pass + 1
+      while k <= set.himpunan do
+         if set[idx_min].anggota > set[k].anggota then
+            idx_min <- k
+         endif
+         k <- k + 1
+      endwhile
+      temp <- set[Pass].anggota
+      set[Pass].anggota <- set[idx_min].anggota
+      set[idx_min].anggota <- temp
+    endwhile
+endProcedure
+
+function sama(set1, set2 : tHimpunan) -> boolean
+{mengembalikan true apabila set1 dan set2 adalah sama, atau false apabila sebaliknya}
+Kamus
+  find : boolean
+  i , j: integer
+Algoritma
+    i <- 1
+    j <- 1
+    find <- false
+    for i < set1.panjang do
+    for j < set2.panjang do
+        if set1[i].himpunan == set2[j].himpunan then
+        find <- true
+        endif
+    endfor
+    endfor
+    return find
+endfunction
+
+Program samaData
+Kamus 
+    arrHimpunan, set1, set2 : tHimpunan
+    target : integer
+
+Algoritma
+    input(arrHimpunan)
+    ada(arrHimpunan, target)
+    urut(arrHimpunan)
+    
+    output("Himpunan 1 == Himpunan 2?,  sama(set1, set2))
+endProgram
+

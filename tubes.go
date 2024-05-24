@@ -45,9 +45,9 @@ var namaDicari string
 var pilih, nomorNIK int
 
 func main() {
-	var input Login
-	login(&input)
-	loading()
+	// var input Login
+	// login(&input)
+	// loading()
     menu()
 }
 
@@ -86,7 +86,9 @@ func menu() {
         case 5:
             clearScreen()
             cetakData(dataD, nDesa ,nPenduduk)
-        case 6:
+		case 6:
+			ubahStatusPerkawinan(&dataD, nDesa, nPenduduk)
+        case 7:
             shouldExit = true
             fmt.Println("================================")
             fmt.Println("TERIMA KASIH")

@@ -276,37 +276,3 @@
 //     }
 // }
 
-// func editData(T *tabDesa, nDesa, nPenduduk int, x string) {
-    
-//     var searchQuery string
-// 	fmt.Println("================================")
-// 	fmt.Println("1. Edit Data Desa")
-// 	fmt.Println("2. Edit Data Penduduk")
-// 	fmt.Println("3. Exit")
-// 	fmt.Println("================================")
-// 	fmt.Println("Pilih: ")
-// 	fmt.Scan(&pilih)
-	
-//     found := false
-//     for i := 0; i < nDesa; i++ { //jika i kurang dari nDesa dia jalan
-//         for j := 0; j < nPenduduk; j++ { // jika j kurang dari jumlah RT yang ada di desa ke-i dia jalan
-//                 var desaMatch, pendudukMatch bool
-//                 if pilih == 1 {
-//                     desaMatch = T[i].namaDesa == searchQuery
-//                 } else {
-//                     cariData(*T, nDesa, nPenduduk)
-//                     pendudukMatch =
-//                 }
-
-//                 if match {
-//                     fmt.Printf("Masukan Data yang ingin diubah: ")
-//                     fmt.Scan()
-					
-//                     found = true
-//                 }
-//         }
-//     }
-//     if !found {
-//         fmt.Println("Data Tidak Ada")
-//     }
-// }
