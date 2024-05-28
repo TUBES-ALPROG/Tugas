@@ -1,5 +1,3 @@
-
-
 package main
 
 import (
@@ -20,7 +18,8 @@ type dataDesa struct {
     jumlahRt   int
     jumlahRw   int
 	pendapatanUMKM int
-    penduduk   [NMAX]dataPenduduk // Penambahan slice untuk menyimpan penduduk
+    penduduk   [NMAX]dataPenduduk
+    jumlahPenduduk int // Penambahan slice untuk menyimpan penduduk
 }
 
 type dataPenduduk struct {
@@ -49,20 +48,47 @@ var namaDicari string
 var pilih, nomorNIK int
 
 func main() {
-	// var input Login
-	// login(&input)
-	//loading()
+	var input Login
+	login(&input)
+	loading()
+    clearScreen()
     menu()
 }
-
+func menuDalam() {
+    for !shouldExit {
+        fmt.Println("")
+        fmt.Println("============")
+        fmt.Println("Pilih Menu: ")
+        fmt.Println("1. Back")
+        fmt.Println("2. Exit")
+        fmt.Print("Pilih: ")
+        fmt.Scan(&pilih)
+        fmt.Println("============")
+        
+        switch pilih {
+        case 1:
+            clearScreen()
+            menu()
+        case 2:
+            clearScreen()
+            fmt.Println("================================")
+            fmt.Printf("%21s\n","TERIMA KASIH")
+            fmt.Println("================================")
+            time.Sleep(1 * time.Second)
+            clearScreen()
+            shouldExit = true
+        }
+    }
+}
 // Tampilan Menu Utama
 func menu() {
     for !shouldExit {
+        fmt.Println("Menu")
         fmt.Println("================================")
         fmt.Printf("%18s\n", "SI DESA")
         fmt.Println(" Aplikasi Sistem Informasi Desa")
         fmt.Println("================================")
-        fmt.Println("Pilih menu:")
+        fmt.Println("Pilih Menu:")
         fmt.Println("1. Input Data")
         fmt.Println("2. Cari Data")
         fmt.Println("3. Hapus Data")
@@ -71,7 +97,7 @@ func menu() {
         fmt.Println("6. UMKM")
         fmt.Println("7. Exit")
         fmt.Println()
-        fmt.Print("Pilih:")
+        fmt.Print("Pilih: ")
         fmt.Scan(&pilih)
         fmt.Println("================================")
         fmt.Println()
@@ -84,7 +110,8 @@ func menu() {
             clearScreen()
             cariData(dataD, nDesa, nPenduduk)
         case 3:
-            deleteData(&dataD, &nDesa, &nPenduduk)
+            clearScreen()
+            deleteData(&dataD, &nDesa)
          case 4:
             clearScreen()
             editData(&dataD, nDesa, nPenduduk)
@@ -95,10 +122,13 @@ func menu() {
             clearScreen()
             tambahUMKM(&dataD, nDesa)
         case 7:
+            clearScreen()
+            fmt.Println("================================")
+            fmt.Printf("%21s\n","TERIMA KASIH")
+            fmt.Println("================================")
+            time.Sleep(1 * time.Second)
+            clearScreen()
             shouldExit = true
-            fmt.Println("================================")
-            fmt.Println("TERIMA KASIH")
-            fmt.Println("================================")
         default:
             fmt.Println("Masukan tidak valid!")
             clearScreen()
@@ -179,6 +209,7 @@ func inputData(K *tabDesa, nDesa, nPendudukDesa *int) {
     /* {I.S. ___ 
         F.S. ___}
     */
+    fmt.Println("Menu >> Input Data")
 	fmt.Println("================================")
     fmt.Printf("%18s\n", "SI DESA")
 	fmt.Printf("%29s\n","INPUT DATA DESA & PENDUDUK")
@@ -216,8 +247,10 @@ func inputData(K *tabDesa, nDesa, nPendudukDesa *int) {
 			fmt.Scan(&(*K)[i].penduduk[j].noNIK)
 			fmt.Print("Status Kawin?: ")
 			fmt.Scan(&(*K)[i].penduduk[j].statusPerkawinan)
+            K[i].jumlahPenduduk++
 		}
 	}
+    menuDalam()
 }
 
 // -------FUNGSI UNTUK MENCETAK DATA DESA & PENDUDUK---------
@@ -225,10 +258,11 @@ func cetakData(K tabDesa, nDesa, nPenduduk int) {
     /* {I.S. ___ 
         F.S. ___}
     */
-    fmt.Println("================================")
-    fmt.Printf("%18s\n", "SI DESA")
-    fmt.Printf("%28s\n","CETAK DATA PENDUDUK DESA")
-    fmt.Println("================================")
+    fmt.Println("Menu >> Cetak Data")
+    fmt.Println("=============================================================================================")
+    fmt.Printf("%45s\n", "SI DESA")
+    fmt.Printf("%54s\n","CETAK DATA PENDUDUK DESA")
+    fmt.Println("=============================================================================================")
 
     for i := 0; i < nDesa; i++ {
         fmt.Printf("Data Desa ke-%d\n", i+1)
@@ -237,17 +271,18 @@ func cetakData(K tabDesa, nDesa, nPenduduk int) {
         fmt.Printf("Jumlah RT: %d\n", K[i].jumlahRt)
         fmt.Printf("Jumlah RW: %d\n", K[i].jumlahRw)
         fmt.Printf("Pendapatan UMKM Desa: %d\n", K[i].pendapatanUMKM)
-        fmt.Println("================================")
+        fmt.Println("=============================================================================================")
         fmt.Printf("%-20s%-10s%-20s%-5s%-5s%-15s%-20s\n", "Nama Penduduk", "Umur", "Alamat", "RT", "RW", "NIK", "Status Perkawinan")
-        for j := 0; j < nPenduduk; j++ {
+        for j := 0; j < K[i].jumlahPenduduk; j++ {
             fmt.Printf("%-20s%-10d%-20s%-5d%-5d%-15d%-20s\n", 
             K[i].penduduk[j].namaPenduduk, K[i].penduduk[j].umurPenduduk, 
             K[i].penduduk[j].alamatRumah, K[i].penduduk[j].noRT, K[i].penduduk[j].noRW, 
             K[i].penduduk[j].noNIK, K[i].penduduk[j].statusPerkawinan)
         }
-        fmt.Println("================================")
+        fmt.Println("=============================================================================================")
         fmt.Println("")
     }
+    menuDalam()
 }
 
 
@@ -257,8 +292,10 @@ func cariData(K tabDesa, nDesa, nPenduduk int) {
         F.S. ___}
     */
     var data dataPenduduk
+    fmt.Println("Menu >> Cari Data")
     fmt.Println("================================")
-    fmt.Println("PENCARIAN DATA PENDUDUK DESA")
+    fmt.Printf("%18s\n", "SI DESA")
+    fmt.Printf("%25s\n","PENCARIAN DATA PENDUDUK DESA")
     fmt.Println("================================")
     fmt.Println("MENU PILIHAN PENCARIAN")
     fmt.Println("1. Nama")
@@ -309,9 +346,10 @@ func cariData(K tabDesa, nDesa, nPenduduk int) {
     if !found {
         fmt.Println("Data Tidak Ada")
     }
-
+    menuDalam()
 }
 
+// -------FUNGSI UBAH DATA PENDUDUK DAN DESA--------
 func editData(T *tabDesa, nDesa, nPenduduk int) {
     /* {I.S. ___ 
         F.S. ___}
@@ -330,14 +368,18 @@ func editData(T *tabDesa, nDesa, nPenduduk int) {
         rt int
         rw int
     )
+    fmt.Println("Menu >> Edit Data")
 	fmt.Println("================================")
-    fmt.Println("Menu Edit Data")
+    fmt.Printf("%18s\n", "SI DESA")
+    fmt.Println("%25s\n", "PENYUNTINGAN DATA PENDUDUK DESA")
+	fmt.Println("================================")
+    fmt.Println("MENU EDIT DATA: ")
 	fmt.Println("1. Edit Data Desa")
 	fmt.Println("2. Edit Data Penduduk")
 	fmt.Println("3. Edit Status Perkawinan")
 	fmt.Println("4. Exit")
 	fmt.Println("================================")
-	fmt.Println("Pilih: ")
+	fmt.Print("Pilih: ")
 	fmt.Scan(&pilih)
 
 	switch pilih {
@@ -345,7 +387,7 @@ func editData(T *tabDesa, nDesa, nPenduduk int) {
         fmt.Print("Masukan Nama Desa: ")
         fmt.Scan(&nama_desa)
     case 2:
-        fmt.Println("Masukan Nama Penduduk: ")
+        fmt.Print("Masukan Nama Penduduk: ")
         fmt.Scan(&nama)
     case 3:
         ubahStatusPerkawinan(T, nDesa, nPenduduk)
@@ -419,6 +461,7 @@ func editData(T *tabDesa, nDesa, nPenduduk int) {
     if !found {
         fmt.Println("Data Tidak Ada")
     }
+    menuDalam()
 }
 
 // -------FUNGSI UBAH STATUS PERKAWINAN PENDUDUK--------
@@ -454,15 +497,19 @@ func ubahStatusPerkawinan(K *tabDesa, nDesa, nPenduduk int) {
     }
 }
 
-func deleteData(T *tabDesa, nDesa, nPenduduk *int){
+func deleteData(T *tabDesa, nDesa *int){
     var nama_desa, nama string
+    fmt.Println("Menu >> Hapus Data")
     fmt.Println("================================")
-    fmt.Println("Menu Edit Data")
-	fmt.Println("1. Hapus Desa")
+    fmt.Printf("%18s\n", "SI DESA")
+    fmt.Println("PENGHAPUSAN DATA DESA & PENDUDUK")
+    fmt.Println("================================")
+    fmt.Println("MENU HAPUS DATA: ")
+	fmt.Println("1. Hapus Data Desa")
 	fmt.Println("2. Hapus Data Penduduk")
 	fmt.Println("3. Exit")
 	fmt.Println("================================")
-	fmt.Println("Pilih: ")
+	fmt.Print("Pilih: ")
 	fmt.Scan(&pilih)
     
     found := false
@@ -482,14 +529,16 @@ func deleteData(T *tabDesa, nDesa, nPenduduk *int){
                 *nDesa--
                 found = true
             }
-    }
+        }
+        fmt.Println("Data Berhasil Dihapus!")
     case 2:
         fmt.Println("Masukan Nama Penduduk: ")
         fmt.Scan(&nama)
         for i := 0; i < *nDesa; i++ {
-            for j := 0; j < *nPenduduk; j++ {
+            nPenduduk := T[i].jumlahPenduduk
+            for j := 0; j < nPenduduk; j++ {
                 if T[i].penduduk[j].namaPenduduk == nama {
-                    for k := j; k < *nPenduduk - 1; k++{
+                    for k := j; k < nPenduduk - 1; k++{
                         T[i].penduduk[k].namaPenduduk = T[i].penduduk[k+1].namaPenduduk
                         T[i].penduduk[k].alamatRumah = T[i].penduduk[k+1].alamatRumah
                         T[i].penduduk[k].umurPenduduk = T[i].penduduk[k+1].umurPenduduk
@@ -498,12 +547,13 @@ func deleteData(T *tabDesa, nDesa, nPenduduk *int){
                         T[i].penduduk[k].noNIK = T[i].penduduk[k+1].noNIK
                         T[i].penduduk[k].statusPerkawinan = T[i].penduduk[k+1].statusPerkawinan
                     }
-
-                    *nPenduduk--
+                    T[i].jumlahPenduduk--
+                    T[i].penduduk[j] = T[i].penduduk[nPenduduk - 1]
                     found = true
                 }
             }
         }
+        fmt.Println("Data Berhasil Dihapus!")
     case 3:
         return
     }
@@ -511,6 +561,7 @@ func deleteData(T *tabDesa, nDesa, nPenduduk *int){
     if !found {
         fmt.Println("Data Tidak Ada")
     }
+    menuDalam()
 }
 
 // -------FUNGSI UNTUK MENAMBAH DATA UMKM---------
@@ -520,7 +571,8 @@ func tambahUMKM(K *tabDesa, nDesa int) {
 	var pendapatanUMKM int
 
 	fmt.Println("================================")
-	fmt.Println("Tambah Data UMKM")
+    fmt.Printf("%18s\n", "SI DESA")
+	fmt.Printf("%23s\n","TAMBAH DATA UMKM")
 	fmt.Println("================================")
 	fmt.Print("Masukkan Nama Desa: ")
 	fmt.Scan(&namaDesa)
@@ -546,7 +598,8 @@ func tambahUMKM(K *tabDesa, nDesa int) {
 
 	if !found {
 		fmt.Println("Data Desa tidak ditemukan.")
-	} 
+	}
+    menuDalam()
 }
 
 func clearScreen() {
@@ -554,10 +607,4 @@ func clearScreen() {
 	cmd = exec.Command("cmd", "/c", "cls")
 	cmd.Stdout = os.Stdout
 	cmd.Run()
-}
-
-func waitForEnter() {
-	fmt.Println("\nTekan Enter untuk lanjutkan...")
-	scanner := bufio.NewReader(os.Stdin)
-	scanner.ReadBytes('\n')
 }
