@@ -48,9 +48,9 @@ var namaDicari string
 var pilih, nomorNIK int
 
 func main() {
-	var input Login
-	login(&input)
-	loading()
+	// var input Login
+	// login(&input)
+	// loading()
     clearScreen()
     menu()
 }
@@ -95,7 +95,8 @@ func menu() {
         fmt.Println("4. Edit Data")
         fmt.Println("5. Cetak Data")
         fmt.Println("6. UMKM")
-        fmt.Println("7. Exit")
+        fmt.Println("7. Pendapatan Tertinggi UMKM")
+        fmt.Println("8. Exit")
         fmt.Println()
         fmt.Print("Pilih: ")
         fmt.Scan(&pilih)
@@ -122,6 +123,9 @@ func menu() {
             clearScreen()
             tambahUMKM(&dataD, nDesa)
         case 7:
+            clearScreen()
+            urutkanUMKM(dataD, nDesa)
+        case 8:
             clearScreen()
             fmt.Println("================================")
             fmt.Printf("%21s\n","TERIMA KASIH")
@@ -607,4 +611,37 @@ func clearScreen() {
 	cmd = exec.Command("cmd", "/c", "cls")
 	cmd.Stdout = os.Stdout
 	cmd.Run()
+}
+
+// -------FUNGSI UNTUK MENGURUTKAN DESA BERDASARKAN PENDAPATAN UMKM---------
+func urutkanUMKM(K tabDesa, nDesa int) {
+    // Selection Sort untuk mengurutkan desa berdasarkan pendapatan UMKM
+    fmt.Println("Menu >> Urutkan UMKM")
+    fmt.Println("=============================================================================================")
+    fmt.Printf("%45s\n", "SI DESA")
+    fmt.Printf("%54s\n", "DATA DESA BERDASARKAN PENDAPATAN UMKM")
+    
+    for i := 0; i < nDesa-1; i++ {
+        maxIdx := i
+        for j := i + 1; j < nDesa; j++ {
+            if K[j].pendapatanUMKM > K[maxIdx].pendapatanUMKM {
+                maxIdx = j
+            }
+        }
+        // Tukar posisi desa
+        K[i], K[maxIdx] = K[maxIdx], K[i]
+    }
+
+    fmt.Println("Menu >> Urutkan UMKM")
+        fmt.Println("=============================================================================================")
+        fmt.Printf("%45s\n", "SI DESA")
+        fmt.Printf("%54s\n", "DATA DESA BERDASARKAN PENDAPATAN UMKM")
+        fmt.Println("=============================================================================================")
+        fmt.Printf("%-20s%-20s\n", "Nama Desa", "Pendapatan UMKM")
+        for i := 0; i < nDesa; i++ {
+            fmt.Printf("%-20s%-20d\n", K[i].namaDesa, K[i].pendapatanUMKM)
+        }   
+        fmt.Println("=============================================================================================")
+
+        menuDalam()
 }
