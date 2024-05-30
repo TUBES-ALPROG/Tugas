@@ -391,6 +391,7 @@ func editData(T *tabDesa, nDesa, nPenduduk int) {
     case 3:
         ubahStatusPerkawinan(T, nDesa, nPenduduk)
     case 4:
+        clearScreen()
         return
     }
 
@@ -545,6 +546,7 @@ func deleteData(T *tabDesa, nDesa *int){
             }
         }
     case 3:
+        clearScreen()
         return
     }
     
