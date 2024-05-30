@@ -179,7 +179,7 @@ func login(input *Login) {
 
 	time.Sleep(time.Duration(durasi) * time.Second)
 	fmt.Println("================================")
-	fmt.Println("SELAMAT DATANG DI SIDESA!!")
+	fmt.Printf("%28s\n","SELAMAT DATANG DI SIDESA")
 	fmt.Println("================================")
 
 	for percobaan <= percobaanMaks {
