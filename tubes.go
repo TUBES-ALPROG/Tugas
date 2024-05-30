@@ -288,6 +288,9 @@ func cetakData(K tabDesa, nDesa, nPenduduk int) {
 // -------FUNGSI UNTUK MENCARI PENDUDUK---------
 func cariData(K tabDesa, nDesa, nPenduduk int) {
     var data dataPenduduk
+    var searchField string
+    var searchQuery string
+    var searchNik int
     fmt.Println("Menu >> Cari Data")
     fmt.Println("================================")
     fmt.Printf("%18s\n", "SI DESA")
@@ -299,42 +302,44 @@ func cariData(K tabDesa, nDesa, nPenduduk int) {
     fmt.Println("3. EXIT")
     fmt.Print("Pilih: ")
     fmt.Scan(&pilih)
-    var searchField string
+
     switch pilih {
     case 1:
         searchField = "Nama"
+        fmt.Println("================================")
+        fmt.Printf("Masukkan %s: ", searchField)
+        fmt.Scan(&searchQuery)
     case 2:
         searchField = "NIK"
+        fmt.Println("================================")
+        fmt.Printf("Masukkan %s: ", searchField)
+        fmt.Scan(&searchNik)
     case 3:
         clearScreen()
         return
     }
 
-    fmt.Println("================================")
-    fmt.Printf("Masukkan %s: ", searchField)
-    var searchQuery string
-    fmt.Scan(&searchQuery)
+   
 
     found := false
     for i := 0; i < nDesa; i++ { 
         for j := 0; j < nPenduduk; j++ {
+            var match bool
                  if pilih == 1 {
                      data = K[i].penduduk[j]
+                     match = data.namaPenduduk == searchQuery
                  } else {
                      data = K[i].penduduk[j]
+                     match = data.noNIK == searchNik
                  }
-
-                var match bool
-                if pilih == 1 {
-                    match = data.namaPenduduk == searchQuery
-                } else {
-                    match = data.noNIK == nomorNIK
-                }
 
                 if match {
 					fmt.Println("================================")
 				    loading()
-                    fmt.Printf("Data Ditemukan: %+v\n", data)
+                    fmt.Printf("Data Penduduk Ditemukan:\n")
+				    fmt.Printf("%-20s%-10s%-20s%-5s%-5s%-15s%-20s\n", "Nama Penduduk", "Umur", "Alamat", "RT", "RW", "NIK", "Status Perkawinan")
+				    fmt.Printf("%-20s%-10d%-20s%-5d%-5d%-15d%-20s\n", K[i].penduduk[j].namaPenduduk, K[i].penduduk[j].umurPenduduk, K[i].penduduk[j].alamatRumah, K[i].penduduk[j].noRT, K[i].penduduk[j].noRW, K[i].penduduk[j].noNIK, K[i].penduduk[j].statusPerkawinan)
+                    //fmt.Printf("Data Ditemukan: %+v\n", data)
 					
                     found = true
                 }
@@ -419,6 +424,7 @@ func editData(T *tabDesa, nDesa, nPenduduk int) {
                     T[i].jumlahRt = jumlah_rt
                     T[i].jumlahRw = jumlah_rw
                     found = true
+                    menuDalam()
                 } else if pendudukMatch {
                     fmt.Printf("Data Penduduk Ditemukan:\n")
 				    fmt.Printf("%-20s%-10s%-20s%-5s%-5s%-15s%-20s\n", "Nama Penduduk", "Umur", "Alamat", "RT", "RW", "NIK", "Status Perkawinan")
@@ -438,7 +444,6 @@ func editData(T *tabDesa, nDesa, nPenduduk int) {
                     fmt.Print("NIK: ")
                     fmt.Scan(&NIK)
 					fmt.Println("================================")
-
 				    loading()
                     fmt.Println("Data Berhasil Diubah!")
                     T[i].penduduk[j].namaPenduduk = nama
@@ -448,6 +453,7 @@ func editData(T *tabDesa, nDesa, nPenduduk int) {
                     T[i].penduduk[j].noRW = rw
                     T[i].penduduk[j].noNIK = NIK
                     found = true
+                    menuDalam()
                 }
         }
     }
@@ -593,7 +599,8 @@ func urutkanUMKM(K tabDesa, nDesa int) {
     fmt.Println("Menu >> Urutkan UMKM")
     fmt.Println("=============================================================================================")
     fmt.Printf("%45s\n", "SI DESA")
-    fmt.Printf("%54s\n", "DATA DESA BERDASARKAN PENDAPATAN UMKM")
+    fmt.Printf("%61s\n", "DATA DESA BERDASARKAN PENDAPATAN UMKM")
+    fmt.Println("=============================================================================================")
     
     for i := 0; i < nDesa-1; i++ {
         maxIdx := i
@@ -606,11 +613,6 @@ func urutkanUMKM(K tabDesa, nDesa int) {
         K[i], K[maxIdx] = K[maxIdx], K[i]
     }
     
-    fmt.Println("Menu >> Urutkan UMKM")
-    fmt.Println("=============================================================================================")
-    fmt.Printf("%45s\n", "SI DESA")
-    fmt.Printf("%54s\n", "DATA DESA BERDASARKAN PENDAPATAN UMKM")
-    fmt.Println("=============================================================================================")
     fmt.Printf("%-20s%-20s\n", "Nama Desa", "Pendapatan UMKM")
     for i := 0; i < nDesa; i++ {
         fmt.Printf("%-20s%-20d\n", K[i].namaDesa, K[i].pendapatanUMKM)
