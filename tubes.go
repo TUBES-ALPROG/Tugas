@@ -124,7 +124,7 @@ func menu() {
             tambahUMKM(&dataD, nDesa)
         case 7:
             clearScreen()
-            urutkanUMKM(dataD, nDesa)
+            urutkanUMKM(&dataD, nDesa)
         case 8:
             clearScreen()
             fmt.Println("================================")
@@ -596,23 +596,23 @@ func tambahUMKM(K *tabDesa, nDesa int) {
 
 
 // -------FUNGSI UNTUK MENGURUTKAN DESA BERDASARKAN PENDAPATAN UMKM---------
-func urutkanUMKM(K tabDesa, nDesa int) {
+func urutkanUMKM(K *tabDesa, nDesa int) {
     // Selection Sort untuk mengurutkan desa berdasarkan pendapatan UMKM
     fmt.Println("Menu >> Urutkan UMKM")
     fmt.Println("=============================================================================================")
     fmt.Printf("%45s\n", "SI DESA")
     fmt.Printf("%61s\n", "DATA DESA BERDASARKAN PENDAPATAN UMKM")
     fmt.Println("=============================================================================================")
-    
-    for i := 0; i < nDesa-1; i++ {
-        maxIdx := i
-        for j := i + 1; j < nDesa; j++ {
-            if K[j].pendapatanUMKM > K[maxIdx].pendapatanUMKM {
-                maxIdx = j
-            }
+    var pass, i int
+    var temp dataDesa
+    for pass = 1; pass <= nDesa-1; pass++ {
+        i = pass
+        temp = K[pass]
+        for i > 0 && temp.pendapatanUMKM > K[i-1].pendapatanUMKM {
+            K[i] = K[i-1]
+            i--
         }
-        // Tukar posisi desa
-        K[i], K[maxIdx] = K[maxIdx], K[i]
+        K[i] = temp
     }
     
     fmt.Printf("%-20s%-20s\n", "Nama Desa", "Pendapatan UMKM")
